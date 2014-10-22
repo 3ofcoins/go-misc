@@ -54,6 +54,17 @@ func Sequence(elts ...RxElement) RxElement {
 	return Group(Join("", elts))
 }
 
+// Return a sequence, anchored at the beginning and end
+func Anchor(elts ...RxElement) RxElement {
+	return Sequence(Beginning, Sequence(elts...), End)
+}
+
+// Return a sequence, anchored at the beginning and end, trimming
+// (i.e. matching and not capturing) leading and trailing whitespace
+func TrimAnchor(elts ...RxElement) RxElement {
+	return Sequence(Beginning, AnyWhitespace, Sequence(elts...), AnyWhitespace, End)
+}
+
 // Modify (with "*", "*?", "+", "?" etc)
 func Mod(elt RxElement, modifier string) RxElement {
 	return Group(elt) + RxElement(modifier)
